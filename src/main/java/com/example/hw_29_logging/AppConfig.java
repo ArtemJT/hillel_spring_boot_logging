@@ -1,4 +1,4 @@
-package com.example.hw_29_logging.coffee.order;
+package com.example.hw_29_logging;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

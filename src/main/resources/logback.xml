@@ -7,26 +7,35 @@
   <include resource="org/springframework/boot/logging/logback/default.xml"/>
   <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
+  <property name="pattern" value="%d{DD/MM/YYYY HH:mm:ss.SSS} | %-10.10thread | %5p | %-36.36logger{36} | %3X{num} | %15X{name} | %m%n" />
+
   <!--  В консоль -->
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-      <pattern>%d{DD/MM/YYYY HH:mm:ss.SSS} | %-10.10thread | %5p | %-36.36logger{36} | %3X{num} | %15X{name} | %m%n</pattern>
+      <pattern>${pattern}</pattern>
     </encoder>
   </appender>
 
-  <!--  В файл -->
-  <property name="LOG_DIR" value="./log/application" />
-  <appender name="FILE2" class="ch.qos.logback.core.FileAppender">
-    <file>${LOG_DIR}/tests.log</file>
+  <!--  В файл с разбиением -->
+  <property name="LOG_DIR" value="./log" />
+  <appender name="TIME_BASED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- daily rollover -->
+      <fileNamePattern>${LOG_DIR}/board.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <maxHistory>1</maxHistory>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>1KB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+
     <encoder>
-      <pattern>%d{DD/MM/YYYY HH:mm:ss.SSS} |-xxxx-| %-10.10thread | %5p | %-36.36logger{36} | %m%n</pattern>
+      <pattern>${pattern}</pattern>
     </encoder>
   </appender>
 
   <root level="INFO">
     <appender-ref ref="CONSOLE" />
-<!--    <appender-ref ref="FILE2" />-->
-<!--    <appender-ref ref="TIME_BASED_FILE" />-->
+    <appender-ref ref="TIME_BASED_FILE" />
   </root>
 
 <!--  <logger name="org.springframework.web" level="DEBUG"/>-->
